@@ -180,7 +180,7 @@ async def voice(ctx, com):
 	if com.startswith('join'):
 		com = com.replace('join', '')
 		if com == '':
-			bird = await ctx.guild.fetch_member(392502213341216769)
+			bird = await ctx.guild.fetch_member(406629388059410434)
 			chn = bird.voice.channel
 			try:
 				await chn.connect()
@@ -404,7 +404,7 @@ async def embed(ctx):
 
 @client.event
 async def on_ready():
-    c = client.get_channel(886323743503298590)
+    c = client.get_channel(751604133798215836)
     global region
     region = store('react.json', None, True)
     global lms
