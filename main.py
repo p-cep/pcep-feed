@@ -19,17 +19,12 @@ async def on_ready():
     await ready_status(client, config)
     pccs_feed.start()
     print("ready")
-
-@client.event
-async def on_message(message):
-    if message.author.bot: return
-    await client.process_commands(message)
     
 @client.event
 async def on_message(message):
     if message.author.bot: return
-    if str(client.user.id) in message.content:
-        await messsage.channel.send("what the fuck do you want bitch")
+    if f"<@!{client.user.id}>" in message.content:
+        await messsage.reply(content="what the fuck do you want bitch")
     await client.process_commands(message)
 
 @client.command()
@@ -47,7 +42,7 @@ async def start(ctx):
 @client.command()
 @commands.is_owner()
 async def stop(ctx):
-    pccs_feed.start()
+    pccs_feed.stop()
     await ctx.send("Stopped the task loop. Please note you must start it up again with `p/start`")
 
 @tasks.loop(minutes=5)
