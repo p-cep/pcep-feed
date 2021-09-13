@@ -27,9 +27,10 @@ async def on_message(message):
     
 @client.event
 async def on_message(message):
-    mention = f'<!{bot.user.id}>'
-    if mention in message:
+    if message.author.bot: return
+    if str(client.user.id) in message.content:
         await messsage.channel.send("what the fuck do you want bitch")
+    await client.process_commands(message)
 
 @client.command()
 @commands.is_owner()
