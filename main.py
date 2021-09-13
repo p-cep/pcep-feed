@@ -23,7 +23,7 @@ async def on_ready():
 @client.event
 async def on_message(message):
     if message.author.bot: return
-    if f"<@!{client.user.id}>" in message.content:
+    if f"{client.user.id}" in message.content:
         await message.reply(content="what the fuck do you want bitch")
     await client.process_commands(message)
 
