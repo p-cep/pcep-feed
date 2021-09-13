@@ -19,12 +19,12 @@ async def on_ready():
     await ready_status(client, config)
     pccs_feed.start()
     print("ready")
-    
+
 @client.event
 async def on_message(message):
     if message.author.bot: return
     if f"<@!{client.user.id}>" in message.content:
-        await messsage.reply(content="what the fuck do you want bitch")
+        await message.reply(content="what the fuck do you want bitch")
     await client.process_commands(message)
 
 @client.command()
