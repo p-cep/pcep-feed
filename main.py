@@ -26,7 +26,7 @@ async def on_message(message):
     if f"{client.user.id}" in message.content and 'can i go on a date' not in message.content:
         await message.reply(content="what the fuck do you want bitch")
     elif f"{client.user.id}" in message.content and 'can i go on a date' in message.content:
-        if str(message.author.id) not in config['owner_ids']:
+        if message.author.id not in config['owner_ids']:
             await message.reply(content="srry i have boyfriend")
             return
         await message.reply(content="yes bb ofc i will go on date w/ u :kissing_heart:")
