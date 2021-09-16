@@ -1,7 +1,7 @@
 import discord
 import requests
 import xmltodict
-import datetime
+import datetime, time
 from discord.ext import commands, tasks
 from discord_slash import SlashCommand
 from cogs.util import store, ready_status
