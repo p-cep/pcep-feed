@@ -1,9 +1,9 @@
 import discord
 import requests
 import xmltodict
+import datetime
 from discord.ext import commands, tasks
 from discord_slash import SlashCommand
-from datetime import datetime
 from cogs.util import store, ready_status
 
 config = store('config.json', None, True)
@@ -19,6 +19,12 @@ async def on_ready():
     await ready_status(client, config)
     pccs_feed.start()
     print("ready")
+    global starttime
+    starttime = time.time()
+
+@client.command()
+async def uptime(ctx):
+    await ctx.send(f"The current uptime is: {str(datetime.timedelta(seconds=int(round(time.time()-starttime))))}")
 
 @client.event
 async def on_message(message):
@@ -58,7 +64,7 @@ async def pccs_feed():
         return
     else:
         if data[0]['description'] == None: data[0]['description'] = 'No description provided'
-        embed = discord.Embed(title=data[0]['title'], description=data[0]['description'], timestamp=datetime.utcnow(), color=discord.Color.blurple(), url=data[0]['link'])
+        embed = discord.Embed(title=data[0]['title'], description=data[0]['description'], timestamp=datetime.datetime.utcnow(), color=discord.Color.blurple(), url=data[0]['link'])
         embed.set_footer(text='Retrieved')
         embed.set_author(name="P-CEP News post")
         c = client.get_channel(886323743503298590)
