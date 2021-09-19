@@ -21,7 +21,7 @@ async def _join(ctx):
 @slash.slash(name='color')
 async def _color(ctx):
     color = hex(random.randint(1118481,16777215))
-    await ctx.channel.send(embed=discord.Embed(title='new color', description='click button below to confirm', color=int(color, base=16)), components=[Button(label='confirm', id=f'conf-{ctx.author.id}'), Button(label='cancel', id=f'canc-{ctx.author.id}'), Button(label='reroll', id=f'rero-{ctx.author.id}')])
+    await ctx.channel.send(embed=discord.Embed(title='new color', description='click button below to confirm', color=int(color, base=16)), components=[Button(label='confirm', id=f'conf-{ctx.author.id}-{color}'), Button(label='cancel', id=f'canc-{ctx.author.id}'), Button(label='reroll', id=f'rero-{ctx.author.id}')])
 
 @client.event
 async def on_button_click(interaction):
@@ -32,17 +32,17 @@ async def on_button_click(interaction):
         return
     if interaction.component.label == 'confirm':
         r = interaction.guild.get_role(885274527251193956)
-        await r.edit(colour=int(color, base=16))
+        await r.edit(colour=int(interaction.component.id.split("-")[2], base=16))
         await interaction.message.delete()
     if interaction.component.label == 'reroll':
         colorr = hex(random.randint(1118481,16777215))
         await interaction.respond(type=6)
-        await interaction.message.edit(embed=discord.Embed(title='new color', description='click button below to confirm', color=int(colorr, base=16)), components=[Button(label='confirm', id=f'conf-{interaction.component.id.split("-")[1]}'), Button(label='cancel', id=f'canc-{interaction.component.id.split("-")[1]}'), Button(label='reroll', id=f'rero-{interaction.component.id.split("-")[1]}')])
+        await interaction.message.edit(embed=discord.Embed(title='new color', description='click button below to confirm', color=int(colorr, base=16)), components=[Button(label='confirm', id=f'conf-{interaction.component.id.split("-")[1]}-{colorr}'), Button(label='cancel', id=f'canc-{interaction.component.id.split("-")[1]}'), Button(label='reroll', id=f'rero-{interaction.component.id.split("-")[1]}')])
 
 @client.event
 async def on_ready():
     await ready_status(client, config)
-    # pccs_feed.start()
+    pccs_feed.start()
     print("ready")
     global starttime
     starttime = time.time()
@@ -81,7 +81,7 @@ async def stop(ctx):
     pccs_feed.stop()
     await ctx.send("Stopped the task loop. Please note you must start it up again with `p/start`")
 
-# @tasks.loop(minutes=5)
+@tasks.loop(minutes=5)
 async def pccs_feed():
     raw = xmltodict.parse(requests.get("https://www.pccsk12.com/Home/Components/RssFeeds/RssFeed/View?ctID=5&cateIDs=23").text)
     data = raw['rss']['channel']['item']
