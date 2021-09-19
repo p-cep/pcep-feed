@@ -5,5 +5,16 @@
   "status": "online",
   "atype": "w",
   "activity": "for updates",
+  "slashConfig": {
+    "auth": {
+        "Authorization": "Bot ODg2MjcwNjM5Nzg5NDY1NzIx.YTzJ2g.BVXEHgCyeDZUrQJ5OG3Hg7eA4fc"
+    },
+    "appID": "886270639789465721",
+    "guildID": "751604133798215833",
+    "selfID": "406629388059410434",
+    "staff": "789593786287915010",
+    "tempID": null,
+    "tips": false
+  },
   "owner_ids": [406629388059410434, 512063606750183429, 542489543065206785, 604043117750124575]
 }

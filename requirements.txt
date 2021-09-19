@@ -1,4 +1,5 @@
 discord
 discord-py-interactions
+discord-components
 requests
 xmltodict
