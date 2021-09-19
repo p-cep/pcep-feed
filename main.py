@@ -42,7 +42,7 @@ async def on_button_click(interaction):
 @client.event
 async def on_ready():
     await ready_status(client, config)
-    # pccs_feed.start()
+    pccs_feed.start()
     print("ready")
     global starttime
     starttime = time.time()
@@ -81,7 +81,7 @@ async def stop(ctx):
     pccs_feed.stop()
     await ctx.send("Stopped the task loop. Please note you must start it up again with `p/start`")
 
-# @tasks.loop(minutes=5)
+@tasks.loop(minutes=5)
 async def pccs_feed():
     raw = xmltodict.parse(requests.get("https://www.pccsk12.com/Home/Components/RssFeeds/RssFeed/View?ctID=5&cateIDs=23").text)
     data = raw['rss']['channel']['item']
