@@ -1,7 +1,7 @@
 import asyncio
 import discord
 from discord.ext import commands
-from cogs import util
+from cogs import util as *
 import json
 
 class counter(commands.Cog):
@@ -28,12 +28,15 @@ class counter(commands.Cog):
                 await payload.message.user_id.add_roles()
 """
     async def on_message(self,message):
-        config = util.store('counterConfig.json', None, True) # none = no key, true = read
+        config = store('counterConfig.json', None, True) # none = no key, true = read
         normChannel = config["countingNormalChannelID"]
         seriousChannel = config["countingSeriousChannelID"]
         roleID = config["countingRoleID"]
         ownerIDs = store('config.json','owner_ids', True)
-        userDict = store('counterData.json',message.author.id,True)
+        counterData = store('counterData.json',None, True)
+        userDict = counterData.get(message.author.id, False)
+        numSerious = counterData["numSerious"]
+        
         
                 
 def setup(bot):
