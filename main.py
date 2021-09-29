@@ -41,7 +41,7 @@ async def on_button_click(interaction):
 
 @client.event
 async def on_ready():
-    await ready_status(client, config)
+    await get_ready(client)
     pccs_feed.start()
     print("ready")
     global starttime
