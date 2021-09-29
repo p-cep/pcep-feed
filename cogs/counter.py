@@ -2,8 +2,9 @@ import asyncio
 import discord
 from discord.ext import commands
 from cogs import util
+import json
 
-class Counter(commands.Cog):
+class counter(commands.Cog):
     def __init__(self,bot):
         self.bot = bot
     
@@ -25,4 +26,4 @@ class Counter(commands.Cog):
                 await payload.message.user_id.add_roles()
                 
 def setup(bot):
-    bot.add_cog(Counter(bot))
+    bot.add_cog(counter(bot))
