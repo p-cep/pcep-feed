@@ -9,6 +9,8 @@ class counter(commands.Cog):
         self.bot = bot
     
     @commands.Cog.listener()
+    #Code that was assuming that I had to check whether or not the counting bot reacted, but I don't so its fine
+    """
     async def on_raw_reaction_add(self, payload):
         config = util.store('counterConfig.json', None, True) # none = no key, true = read
         normChannel = config["countingNormalChannelID"]
@@ -24,6 +26,7 @@ class counter(commands.Cog):
                 countingDict[payload.message.user_id] = 1
             if countingDict[payload.message.user_id] == 100:
                 await payload.message.user_id.add_roles()
+"""
                 
 def setup(bot):
     bot.add_cog(counter(bot))
