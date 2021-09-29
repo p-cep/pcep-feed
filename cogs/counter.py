@@ -27,6 +27,14 @@ class counter(commands.Cog):
             if countingDict[payload.message.user_id] == 100:
                 await payload.message.user_id.add_roles()
 """
+    async def on_message(self,message):
+        config = util.store('counterConfig.json', None, True) # none = no key, true = read
+        normChannel = config["countingNormalChannelID"]
+        seriousChannel = config["countingSeriousChannelID"]
+        roleID = config["countingRoleID"]
+        ownerIDs = store('config.json','owner_ids', True)
+        userDict = store('counterData.json',message.author.id,True)
+        
                 
 def setup(bot):
     bot.add_cog(counter(bot))
