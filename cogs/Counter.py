@@ -1,4 +1,3 @@
-import asyncio
 import discord
 from discord.ext import commands
 from discord.ext.commands.core import command
@@ -10,7 +9,7 @@ class Counter(commands.Cog):
     def __init__(self,bot):
         self.bot = bot
     
-    @commands.command()
+    @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload):
         with open ("../config.json","r") as config:
             normChannel = config["countingNormalChannelID"]
