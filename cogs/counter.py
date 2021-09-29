@@ -32,10 +32,15 @@ class counter(commands.Cog):
         normChannel = config["countingNormalChannelID"]
         seriousChannel = config["countingSeriousChannelID"]
         roleID = config["countingRoleID"]
+        emoji = config["emoji"]
+        if message.channel.id = 
         ownerIDs = store('config.json','owner_ids', True)
         counterData = store('counterData.json',None, True)
         userDict = counterData.get(message.author.id, False)
         numSerious = counterData["numSerious"]
+        numNormal = counterData["numNormal"]
+        
+        
         
         
                 
