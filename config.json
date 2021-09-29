@@ -5,6 +5,9 @@
   "status": "online",
   "atype": "w",
   "activity": "for updates",
+  "cogs": [
+    "cogs.counter",
+  ]
   "slashConfig": {
     "auth": {
         "Authorization": "Bot ODg2MjcwNjM5Nzg5NDY1NzIx.YTzJ2g.BVXEHgCyeDZUrQJ5OG3Hg7eA4fc"
