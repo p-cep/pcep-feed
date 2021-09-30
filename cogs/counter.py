@@ -47,6 +47,12 @@ class counter(commands.Cog):
             userDict = counterData.get(message.author.id, {"seriousCorrect":0,"seriousWrong":0,"normalCorrect":0,"normalWrong":0,"seriousFailures":[],"normalFailures":[],"normalScore":0})
             numSerious = counterData["numSerious"]
             numNormal = counterData["numNormal"]
+            if message.channel.id == normChannel:
+                if WordList[0] == (numNormal+1):
+                    await message.add_reaction("✅")
+                else:
+                    await message.channel.send(f"{message.user} failed at {numNormal}! They've failed {userDict["normalWrong"]+1} times in this channel.")
+            elif message.channel.id == seriousChannel:
         
         
         
