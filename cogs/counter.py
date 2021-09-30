@@ -28,7 +28,7 @@ class counter(commands.Cog):
 #                await payload.message.user_id.add_roles()
 
     async def on_message(self,message):
-        config = store('counterConfig.json', None, True) # none = no key, true = read
+        config = util.store('counterConfig.json', None, True) # none = no key, true = read
         normChannel = config["countingNormalChannelID"]
         seriousChannel = config["countingSeriousChannelID"]
         roleID = config["countingRoleID"]
@@ -43,7 +43,7 @@ class counter(commands.Cog):
                 break
         if message.channel.id == (normChannel or seriousChannel) and number == True:
             
-            counterData = store('counterData.json',None, True)
+            counterData = util.store('counterData.json',None, True)
             userDict = counterData.get(message.author.id, {"seriousCorrect":0,"seriousWrong":0,"normalCorrect":0,"normalWrong":0,"seriousFailures":[],"normalFailures":[],"normalScore":0})
             numSerious = counterData["numSerious"]
             numNormal = counterData["numNormal"]
