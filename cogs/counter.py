@@ -34,11 +34,17 @@ class counter(commands.Cog):
         roleID = config["countingRoleID"]
         emoji = config["emoji"]
         numbers=["1","2","3","4","5","6","7","8","9"]
-        if message.channel.id == (normChannel or seriousChannel) and message.startswith(numbers):
+        ownerIDs = store('config.json','owner_ids', True)
+        WordList = message.content.split()
+        number = True
+        for i in WordList[0]:
+            if i not in numbers:
+                number = False
+                break
+        if message.channel.id == (normChannel or seriousChannel) and number == True:
             
-            ownerIDs = store('config.json','owner_ids', True)
             counterData = store('counterData.json',None, True)
-            userDict = counterData.get(message.author.id, False)
+            userDict = counterData.get(message.author.id, {"seriousCorrect":0,"seriousWrong":0,"normalCorrect":0,"normalWrong":0,"seriousFailures":[],"normalFailures":[],"normalScore":0})
             numSerious = counterData["numSerious"]
             numNormal = counterData["numNormal"]
         
