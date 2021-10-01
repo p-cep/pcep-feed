@@ -44,7 +44,7 @@ class counter(commands.Cog):
         if message.channel.id == (normChannel or seriousChannel) and number == True:
             
             counterData = util.store('counterData.json',None, True)
-            userDict = counterData.get(message.author.id, {"seriousCorrect":0,"seriousWrong":0,"normalCorrect":0,"normalWrong":0,"seriousFailures":[],"normalFailures":[],"normalScore":0})
+            userDict = counterData.get(message.author.id, {"seriousCorrect":0,"seriousWrong":0,"normalCorrect":0,"normalWrong":0,"seriousFailures":[],"normalFailures":[],"normalScore":0,"seriousKicks":0,"seriousStreak":0})
             numSerious = counterData["numSerious"]
             numNormal = counterData["numNormal"]
             if message.channel.id == normChannel:
