@@ -44,7 +44,7 @@ class counter(commands.Cog):
         if message.channel.id == (normChannel or seriousChannel) and number == True:
             
             counterData = util.store('counterData.json',None, True)
-            userDict = counterData.get(message.author.id, {"seriousCorrect":0,"seriousWrong":0,"normalCorrect":0,"normalWrong":0,"seriousFailures":[],"normalFailures":[],"normalScore":0,"seriousKicks":0,"seriousStreak":0})
+            userDict = counterData.get(message.author.id, {"seriousCorrect":0,"seriousWrong":0,"normalCorrect":0,"normalWrong":0,"seriousFailures":[],"normalFailures":[],"normalScore":0,"seriousStreak":0,"normalStreak":0})
             numSerious = counterData["numSerious"]
             numNormal = counterData["numNormal"]
             if message.channel.id == normChannel:
@@ -53,6 +53,7 @@ class counter(commands.Cog):
                     util.addDict(userDict,"normalCorrect")
                     util.addDict(userDict,"normalScore")
                 else:
+                    await message.add_reaction("❌")
                     await message.channel.send(f"{message.author} failed at {numNormal}! They've failed {userDict["normalWrong"]+1} times in this channel.")
                     util.addDict(userDict,"normalWrong")
                     util.addDict(userDict,"normalScore",-5)
@@ -61,8 +62,11 @@ class counter(commands.Cog):
                     await message.add_reaction("✅")
                     util.addDict(userDict,"seriousCorrect")
                 else:
-                    await message.channel.send(f"{message.author} failed at {numSerious}! They've failed {userDict["seriousWrong"]+1} times in this channel.")
+                    await message.add_reaction("❌")
                     util.addDict(userDict,"seriousWrong")
+                    await message.channel.send(f"{message.author} failed at {numSerious}, the correct number was {numSerious+1}! They've failed {userDict["seriousWrong"]+1} times in this channel. They are getting kicked from the serious channel for the {userDict[seriousFaliures]}")
+                    
+                    
                     
                 
         
