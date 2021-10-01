@@ -50,13 +50,19 @@ class counter(commands.Cog):
             if message.channel.id == normChannel:
                 if WordList[0] == (numNormal+1):
                     await message.add_reaction("✅")
+                    util.addDict(userDict,"normalCorrect")
+                    util.addDict(userDict,"normalScore")
                 else:
                     await message.channel.send(f"{message.author} failed at {numNormal}! They've failed {userDict["normalWrong"]+1} times in this channel.")
+                    util.addDict(userDict,"normalWrong")
+                    util.addDict(userDict,"normalScore",-5)
             elif message.channel.id == seriousChannel:
                 if WordList[0] == (numSerious+1):
                     await message.add_reaction("✅")
+                    util.addDict(userDict,"seriousCorrect")
                 else:
                     await message.channel.send(f"{message.author} failed at {numSerious}! They've failed {userDict["seriousWrong"]+1} times in this channel.")
+                    util.addDict(userDict,"seriousWrong")
                     
                 
         
