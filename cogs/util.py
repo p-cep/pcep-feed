@@ -59,3 +59,7 @@ async def ready_status(client, x):
             return discord.Status.invisible
     if x['atype'] != 'n' or f:
         await client.change_presence(status=stat(), activity=type())
+       
+def addDict(dict,key, amount=1):
+    dict[key] = dict[key]+amount
+    return
