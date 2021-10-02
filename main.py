@@ -4,6 +4,7 @@ import xmltodict
 import time, datetime
 import random
 from discord.ext import commands, tasks
+from os import system
 from discord_slash import SlashCommand
 from discord_components import DiscordComponents, Button, Select, SelectOption
 from cogs.util import store, ready_status
@@ -48,7 +49,7 @@ async def expose(ctx):
     except:
         await ctx.send("nothing to expose!")
         return
-    embed = discord.Embed(color=discord.Color.red(), timestamp=datetime.utcnow(), description=x['content'])
+    embed = discord.Embed(color=discord.Color.red(), timestamp=datetime.datetime.utcnow(), description=x['content'])
     embed.set_author(name=x['author'], icon_url=x['author_icon'])
     embed.set_footer(text='Exposed at')
     if x['files'] != []:
@@ -128,7 +129,11 @@ async def pccs_feed():
         embed.set_author(name="P-CEP News post")
         c = client.get_channel(886323743503298590)
         e = await c.send(content="<@&885280443044347915>", embed=embed)
+        system("git add latest.json")
+        system('git commit -m "Auto-Push news feed"')
+        system('git push origin master')
         await e.publish()
+
         store('latest.json', 'message', val=data[0]['link'])
 
 
