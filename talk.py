@@ -1,31 +1,11 @@
 import discord
 import asyncio
-import json
-
-def store(file, key=None, read=False, val=None, *, pop=False):
-    with open(file, 'r') as v:
-        x = json.load(v)
-    if x is None: return
-    if read is not False:
-        if key is None:
-            return x
-        else:
-            return x[key]
-    elif pop is True:
-            return
-    else:
-        if val is None:
-            with open(file, 'w') as v:
-                json.dump(key, v, indent=4)
-            return
-        x[key] = val
-        with open(file, 'w') as v:
-            json.dump(x, v, indent=4)
+from slashrequest import store
 
 client = discord.Client()
 
 async def commandcheck(message, ctx, lms):
-    voicecom = ['/join', '/leave', '/annoy', '/move', '/mute', '/unmute', '/deafen', '/undeafen']
+    voicecom = ['/join', '/leave', '/annoy', '/move', '/mute', '/unsup', '/unmute', '/deafen', '/undeafen']
     if message.startswith('/close'):
             print("Closing...")
             return "Close"
@@ -66,6 +46,7 @@ async def commandcheck(message, ctx, lms):
         chn = input("Channel Name: ")
         if chn is None:
             chn = ctx.guild.get_channel(788886124159828012)
+
         else:
             try:
                 if type(chn) is str:
@@ -126,13 +107,64 @@ async def commandcheck(message, ctx, lms):
     elif message.startswith('/embed'):
         await embed(ctx)
         return "Done"
-    elif message.startswith('/play'):
-        new = message.replace('/play ', '')
+    elif message.startswith('/loop'):
+        new = message.replace('/loop ', '')
         try:
-            source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(new))
-            ctx.voice_client.play(source, after=lambda e: print('Player error: %s' % e) if e else None)
+            bird = await ctx.guild.fetch_member(406629388059410434)
+            chn = bird.voice.channel
+            try:
+                await chn.connect()
+            except:
+                pass
+            while True:
+                voice_client: discord.VoiceClient = discord.utils.get(client.voice_clients, guild=ctx.guild)
+                if voice_client.is_playing(): continue
+                audio_source = discord.FFmpegPCMAudio(new+'.mp3')
+                voice_client.play(audio_source, after=None)
+                # convert this to an argument in the command
+                if new == 'boom' or new == 'y':
+                    await asyncio.sleep(1.25)
+                elif new == 'fart':
+                    await asyncio.sleep(3.75)
+                elif new == 'bounce':
+                    await asyncio.sleep(7.5)
+                else:
+                    await asyncio.sleep(6)
+                if voice_client.is_playing(): continue
+                audio_source = discord.FFmpegPCMAudio(new+'.mp3')
+                voice_client.play(audio_source, after=None)
+            # never gets called but just for sake of my eyes:
             return "Done"
-        except:
+        except Exception as e:
+            print(f"{e}")
+            return "Fail"
+    elif message.startswith('/p'):
+        new = message.replace('/p ', '')
+        try:
+            bird = await ctx.guild.fetch_member(406629388059410434)
+            chn = bird.voice.channel
+            try:
+                await chn.connect()
+            except:
+                pass
+            guild = ctx.guild
+            try:
+                voice_client: discord.VoiceClient = discord.utils.get(client.voice_clients, guild=guild)
+            except:
+                pass
+            audio_source = discord.FFmpegPCMAudio(new+".mp3")
+            if voice_client.is_playing():
+                voice_client.stop()
+            voice_client.play(audio_source, after=None)
+            # player = chn.create_ffmpeg_player(new, after=lambda: print('done'))
+            # player.start()
+            # while not player.is_done():
+            #     await asyncio.sleep(1)
+            # player.stop()
+            # await chn.disconnect()
+            return "Done"
+        except Exception as e:
+            print(f"{e}")
             return "Fail"
     elif message.startswith('/purge'):
         new = message.replace('/purge ', '')
@@ -184,8 +216,8 @@ async def voice(ctx, com):
 			chn = bird.voice.channel
 			try:
 				await chn.connect()
-			except:
-				print("error")
+			except Exception as e:
+				print(f"error {e}")
 				return "Cont"
 		else:
 			try:
@@ -198,9 +230,9 @@ async def voice(ctx, com):
 		new = com.replace('leave ', '')
 		if new == '':
 			try:
-				await ctx.voice_client.disconnect()
-			except:
-				None
+				await client.voice_clients[0].disconnect()
+			except Exception as e:
+				print(f"{e}")
 			return "Cont"
 		try:
 			new = int(new)
@@ -295,6 +327,26 @@ async def voice(ctx, com):
 		except:
 			return "Cont"
 			
+	elif com.startswith('unsup'):
+		new = com.replace('unsup ', '')
+		if new == '':
+			await ctx.guild.me.edit(suppress=False)
+			return "Cont"
+		try:
+			new = int(new)
+		except:
+			pass
+		if type(new) is str:
+			member = discord.utils.get(ctx.guild.members, name=new)
+			if member is None:
+				member = ctx.guild.get_member_named(new)
+		elif type(new) is int:
+			member = await ctx.guild.fetch_member(new)
+		try:
+			await member.edit(suppress=False)
+		except Exception as e:
+		    print(f"{e}")
+		    return "Cont"		
 	elif com.startswith('unmute'):
 		new = com.replace('unmute ', '')
 		if new == '':
@@ -387,12 +439,12 @@ async def embed(ctx):
     if action == 't':
         ft = input("Footer text: ")
         ts = input("Timestamp: ")
-        if ts is 't':
+        if ts == 't':
             ts = True
     action = input("Author: ")
     if action == 't':
         lnk = input("Link: ")
-        if lnk is '':
+        if lnk == '':
             lnk = None
         atxt = input("Author title text: ")
     e = discord.Embed(title=etitle, color=clr(col), timestamp=time(ts))
@@ -404,7 +456,7 @@ async def embed(ctx):
 
 @client.event
 async def on_ready():
-    c = client.get_channel(751604133798215836)
+    c = client.get_channel(store('config.json', 'channel', True))
     global region
     region = store('react.json', None, True)
     global lms

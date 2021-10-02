@@ -14,6 +14,22 @@ slash = SlashCommand(client)
 dcpnt = DiscordComponents(client)
 color = hex(random.randint(1118481,16777215))
 
+@client.event
+async def on_message_delete(message):
+    if message.author.bot: return
+    d = store('expose.json', None, True)
+    files = []
+    if message.attachments != []:
+        for file in message.attachments:
+            files.append(file.url)
+    d[str(message.channel.id)] = {
+        "content": message.content,
+        "author": f"{message.author}",
+        "author_icon": f"{message.author.avatar_url}",
+        "files": files
+    }
+    store('expose.json', d)
+
 @slash.slash(name='join', description='Get an invite to the P-CEP discord')
 async def _join(ctx):
     await ctx.send("https://discord.gg/rHYsNSbxG7", hidden=True)
@@ -22,6 +38,24 @@ async def _join(ctx):
 async def _color(ctx):
     color = hex(random.randint(1118481,16777215))
     await ctx.channel.send(embed=discord.Embed(title='new color', description='click button below to confirm', color=int(color, base=16)), components=[Button(label='confirm', id=f'conf-{ctx.author.id}-{color}'), Button(label='cancel', id=f'canc-{ctx.author.id}'), Button(label='reroll', id=f'rero-{ctx.author.id}')])
+
+@client.command(aliases=['e'])
+@commands.is_owner()
+async def expose(ctx):
+    try:
+        d = store('expose.json', None, True)
+        x = d[str(ctx.channel.id)]
+    except:
+        await ctx.send("nothing to expose!")
+        return
+    embed = discord.Embed(color=discord.Color.red(), timestamp=datetime.utcnow(), description=x['content'])
+    embed.set_author(name=x['author'], icon_url=x['author_icon'])
+    embed.set_footer(text='Exposed at')
+    if x['files'] != []:
+        embed.set_image(url=x['files'][0])
+    await ctx.send(embed=embed)
+    d.pop(str(ctx.channel.id))
+    store('expose.json', d)
 
 @client.event
 async def on_button_click(interaction):
