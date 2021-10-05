@@ -51,20 +51,37 @@ class counter(commands.Cog):
                 if WordList[0] == (numNormal+1):
                     await message.add_reaction("✅")
                     util.addDict(userDict,"normalCorrect")
-                    util.addDict(userDict,"normalScore")
+                    if userDict["normalScore"] != -1:
+                        util.addDict(userDict,"normalScore")
                 else:
-                    await message.add_reaction("❌")
-                    await message.channel.send(f"{message.author} failed at {numNormal}! They've failed {userDict["normalWrong"]+1} times in this channel.")
                     util.addDict(userDict,"normalWrong")
-                    util.addDict(userDict,"normalScore",-5)
+                    await message.add_reaction("❌")
+                    await message.channel.send(f"{message.author} failed at {numNormal}! They've failed {userDict["normalWrong"]} times in this channel.")
+                    
+                    if userDict["normalScore"] != -1:
+                        util.addDict(userDict,"normalScore",-5)
+                    userDict["normalFailures"].append(numNormal)
+                    numNormal=0
             elif message.channel.id == seriousChannel:
                 if WordList[0] == (numSerious+1):
                     await message.add_reaction("✅")
                     util.addDict(userDict,"seriousCorrect")
                 else:
-                    await message.add_reaction("❌")
                     util.addDict(userDict,"seriousWrong")
-                    await message.channel.send(f"{message.author} failed at {numSerious}, the correct number was {numSerious+1}! They've failed {userDict["seriousWrong"]+1} times in this channel. They are getting kicked from the serious channel for the {userDict[seriousFaliures]}")
+                    await message.add_reaction("❌")
+                    
+                    ending = "th"
+                    if userDict["seriousWrong"] == 1:
+                        ending = "st"
+                    elif userDict["seriousWrong"] == 2:
+                        ending = "nd"
+                    elif  userDict["seriousWrong"] == 3:
+                        ending="st"
+                    await message.channel.send(f"{message.author.mention} failed at {numSerious}, the correct number was {numSerious+1}! They are getting kicked from the serious channel for the {userDict[seriousWrong]}{ending} time.")
+                    userDict["normalScore"] = 0
+                    
+                    userDict["seriousFaliures"].append(numSerious)
+                    numSerious=0
                     
                     
                     
