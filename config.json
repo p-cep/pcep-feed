@@ -1,6 +1,6 @@
 {
-  "token": "ODg2MjcwNjM5Nzg5NDY1NzIx.YTzJ2g.BVXEHgCyeDZUrQJ5OG3Hg7eA4fc",
-  "pfx": "p/",
+  "token": "ODg2MjcwNjM5Nzg5NDY1NzIx.YTzJ2g.7q_23y_xwlg6s9D5I6viK3--Kzg",
+  "pfx": "=",
   "testMode": false,
   "status": "online",
   "atype": "w",
@@ -8,7 +8,7 @@
   "channel": 751604133798215836,
   "slashConfig": {
     "auth": {
-        "Authorization": "Bot ODg2MjcwNjM5Nzg5NDY1NzIx.YTzJ2g.BVXEHgCyeDZUrQJ5OG3Hg7eA4fc"
+        "Authorization": "Bot ODg2MjcwNjM5Nzg5NDY1NzIx.YTzJ2g.7q_23y_xwlg6s9D5I6viK3--Kzg"
     },
     "appID": "886270639789465721",
     "guildID": "751604133798215833",

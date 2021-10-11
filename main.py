@@ -4,7 +4,6 @@ import xmltodict
 import time, datetime
 import random
 from discord.ext import commands, tasks
-from os import system
 from discord_slash import SlashCommand
 from discord_components import DiscordComponents, Button, Select, SelectOption
 from cogs.util import store, ready_status
@@ -30,10 +29,6 @@ async def on_message_delete(message):
         "files": files
     }
     store('expose.json', d)
-
-@slash.slash(name='join', description='Get an invite to the P-CEP discord')
-async def _join(ctx):
-    await ctx.send("https://discord.gg/rHYsNSbxG7", hidden=True)
 
 @slash.slash(name='color')
 async def _color(ctx):
@@ -66,7 +61,7 @@ async def on_button_click(interaction):
         await interaction.message.delete()
         return
     if interaction.component.label == 'confirm':
-        r = interaction.guild.get_role(885274527251193956)
+        r = interaction.guild.get_role(751605185725333574)
         await r.edit(colour=int(interaction.component.id.split("-")[2], base=16))
         await interaction.message.delete()
     if interaction.component.label == 'reroll':
@@ -81,7 +76,6 @@ async def on_ready():
     print("ready")
     global starttime
     starttime = time.time()
-
 @client.command()
 async def uptime(ctx):
     await ctx.send(f"The current uptime is: {str(datetime.timedelta(seconds=int(round(time.time()-starttime))))}")
@@ -89,32 +83,12 @@ async def uptime(ctx):
 @client.event
 async def on_message(message):
     if message.author.bot: return
-    if f"{client.user.id}" in message.content and 'can i go on a date' not in message.content:
-        await message.reply(content="what the fuck do you want bitch")
-    elif f"{client.user.id}" in message.content and 'can i go on a date' in message.content:
-        if message.author.id not in config['owner_ids']:
-            await message.reply(content="srry i have boyfriend")
-            return
-        await message.reply(content="yes bb ofc i will go on date w/ u :kissing_heart:")
     await client.process_commands(message)
 
 @client.command()
-@commands.is_owner()
-async def test(ctx):
-    await pccs_feed()
+async def purge(ctx, limit=1):
     await ctx.message.delete()
-
-@client.command()
-@commands.is_owner()
-async def start(ctx):
-    pccs_feed.start()
-    await ctx.send("started task loop")
-
-@client.command()
-@commands.is_owner()
-async def stop(ctx):
-    pccs_feed.stop()
-    await ctx.send("Stopped the task loop. Please note you must start it up again with `p/start`")
+    await ctx.channel.purge(limit=limit)
 
 @tasks.loop(minutes=5)
 async def pccs_feed():
@@ -127,12 +101,13 @@ async def pccs_feed():
         embed = discord.Embed(title=data[0]['title'], description=data[0]['description'], timestamp=datetime.datetime.utcnow(), color=discord.Color.blurple(), url=data[0]['link'])
         embed.set_footer(text='Retrieved')
         embed.set_author(name="P-CEP News post")
+        # c = client.get_channel(886323743503298590)
         c = client.get_channel(886323743503298590)
         e = await c.send(content="<@&885280443044347915>", embed=embed)
-        system("git add latest.json")
-        system('git commit -m "Auto-Push news feed"')
-        system('git push origin master')
-        await e.publish()
+        if c.type != discord.ChannelType.news:
+            await c.send("Cannot publish to a non-news channel!")
+        else:
+            await e.publish()
 
         store('latest.json', 'message', val=data[0]['link'])
 
