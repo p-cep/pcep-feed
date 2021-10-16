@@ -7,6 +7,7 @@ from discord.ext import commands, tasks
 from discord_slash import SlashCommand
 from discord_components import DiscordComponents, Button, Select, SelectOption
 from cogs.util import store, ready_status
+from os import system
 
 config = store('config.json', None, True)
 client = commands.Bot(command_prefix=config['pfx'], help_command=None, owner_ids=config['owner_ids'])
@@ -108,7 +109,12 @@ async def pccs_feed():
             await c.send("Cannot publish to a non-news channel!")
         else:
             await e.publish()
-
+        try:
+            system('git add latest.json')
+            system(f'git commit -m "[AUTO] Bot upload new latest post"')
+            system('git push')
+        except Exception as e:
+            await c.send(f"{e}")
         store('latest.json', 'message', val=data[0]['link'])
 
 
