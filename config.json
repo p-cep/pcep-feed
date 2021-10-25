@@ -1,5 +1,5 @@
 {
-  "token": "ODg2MjcwNjM5Nzg5NDY1NzIx.YTzJ2g.7q_23y_xwlg6s9D5I6viK3--Kzg",
+  "token": "redacted",
   "pfx": "=",
   "testMode": false,
   "status": "online",
@@ -8,7 +8,7 @@
   "channel": 751604133798215836,
   "slashConfig": {
     "auth": {
-        "Authorization": "Bot ODg2MjcwNjM5Nzg5NDY1NzIx.YTzJ2g.7q_23y_xwlg6s9D5I6viK3--Kzg"
+        "Authorization": "Bot redacted"
     },
     "appID": "886270639789465721",
     "guildID": "751604133798215833",
